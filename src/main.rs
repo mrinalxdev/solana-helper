@@ -1,15 +1,32 @@
-use std::{env, fs, process::exit};
+use std::{env, fs, process::exit, io};
+use std::io::BufRead;
 
 fn run_file(path: &str) -> Result<(), String>{
    match fs::read_to_string(path) {
     Err(msg) => return Err(msg.to_string()),
-    _ => return Ok(()),
+    Ok(contents) => return run(&contents),
    }
     
 }
 
+fn run(_contents : &str) -> Result<(), String>{
+    return Err("Not implemented".to_string());
+}
 
-fn run_prompt(){}
+
+fn run_prompt() -> Result<(), String>{
+    print!(">");
+    let mut buffer = String::new();
+    let stdin = io::stdin();
+    let mut handle = stdin.lock();
+    match handle.read_line(&mut buffer) {
+        Ok(_) => (),
+        Err(_) => return Err("Couldnt read line".to_string()),
+    }
+    println!("You wrote : {}", buffer);
+    Ok(())
+
+}
 
 
 fn main() {
@@ -22,12 +39,17 @@ fn main() {
         match run_file(&args[1]) {
             Ok(_) => exit(0),
             Err(msg) => {
-                println!("ERROR : \n{}", msg)
+                println!("ERROR : \n{}", msg);
+                exit(1);
             }
         }
     } else {
-        run_prompt();
+        match run_prompt(){
+            Ok(_) => exit(0),
+            Err(msg) => {
+                println!("ERROR : \n{}", msg);
+                exit(1);
+            }
+        }
     }
-
-    dbg!(args);
 }
