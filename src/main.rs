@@ -15,15 +15,22 @@ fn run(_contents : &str) -> Result<(), String>{
 
 
 fn run_prompt() -> Result<(), String>{
-    print!(">");
-    let mut buffer = String::new();
-    let stdin = io::stdin();
-    let mut handle = stdin.lock();
-    match handle.read_line(&mut buffer) {
-        Ok(_) => (),
-        Err(_) => return Err("Couldnt read line".to_string()),
+    while true {
+
+        print!(">");
+        let mut buffer = String::new();
+        let stdin = io::stdin();
+        let mut handle = stdin.lock();
+        match handle.read_line(&mut buffer) {
+            Ok(n) => {
+                if n <= 1 {
+                    return Ok(());
+                }
+            },
+            Err(_) => return Err("Couldnt read line".to_string()),
+        }
+        println!("You wrote : {}", buffer);
     }
-    println!("You wrote : {}", buffer);
     Ok(())
 
 }
