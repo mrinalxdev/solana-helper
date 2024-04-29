@@ -1,22 +1,28 @@
-use std::{env, fs, process::exit, io};
+mod scanner;
+use crate::scanner::*;
+
 use std::io::BufRead;
+use std::{env, fs, io, process::exit};
 
-fn run_file(path: &str) -> Result<(), String>{
-   match fs::read_to_string(path) {
-    Err(msg) => return Err(msg.to_string()),
-    Ok(contents) => return run(&contents),
-   }
-    
+fn run_file(path: &str) -> Result<(), String> {
+    match fs::read_to_string(path) {
+        Err(msg) => return Err(msg.to_string()),
+        Ok(contents) => return run(&contents),
+    }
 }
 
-fn run(_contents : &str) -> Result<(), String>{
-    return Err("Not implemented".to_string());
+fn run(contents: &str) -> Result<(), String> {
+    let scanner = Scanner::new(contents);
+    let tokens = scanner.scan_tokens()?;
+
+    for token in tokens {
+        println!("{:?}", token);
+    }
+    return Ok(());
 }
 
-
-fn run_prompt() -> Result<(), String>{
-    while true {
-
+fn run_prompt() -> Result<(), String> {
+    loop {
         print!(">");
         let mut buffer = String::new();
         let stdin = io::stdin();
@@ -26,15 +32,16 @@ fn run_prompt() -> Result<(), String>{
                 if n <= 1 {
                     return Ok(());
                 }
-            },
+            }
             Err(_) => return Err("Couldnt read line".to_string()),
         }
         println!("You wrote : {}", buffer);
+        match run(&buffer) {
+            Ok(_) => (),
+            Err(msg) => println!("{}", msg),
+        }
     }
-    Ok(())
-
 }
-
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -51,7 +58,7 @@ fn main() {
             }
         }
     } else {
-        match run_prompt(){
+        match run_prompt() {
             Ok(_) => exit(0),
             Err(msg) => {
                 println!("ERROR : \n{}", msg);
