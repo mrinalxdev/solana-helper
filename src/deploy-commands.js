@@ -2,6 +2,8 @@ const { Routes, REST } = require("discord.js");
 require("dotenv").config();
 
 const token = process.env.BOT_TOKEN;
+const clientId = process.env.CLIENT_ID;
+const guildId = process.env.GUILD_ID;
 const rest = new REST().setToken();
 
 const commands = [];
@@ -23,4 +25,4 @@ const commands = [];
   } catch (error) {
     console.log(error);
   }
-})();
+})()
