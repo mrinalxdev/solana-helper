@@ -1,0 +1,20 @@
+{
+  "name": "discord",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "keywords": [
+    "solana",
+    "blockchain",
+    "web3",
+    "cryptocurrency"
+  ],
+  "author": "Mrinal Pramanick",
+  "license": "ISC",
+  "dependencies": {
+    "@solana/web3.js": "^1.91.8"
+  }
+}
