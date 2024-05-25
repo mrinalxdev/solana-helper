@@ -15,6 +15,11 @@ class TransactionModule {
     ]);
     return signature;
   }
+
+  async getTransactionDetails(signature) {
+    const details = await this.connection.getTransaction(signature);
+    return details;
+  }
 }
 
 export default TransactionModule;

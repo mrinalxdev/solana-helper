@@ -1,4 +1,4 @@
-import { Transaction, SystemProgram } from "@solana/web3.js";
+import { Transaction, SystemProgram, PublicKey } from "@solana/web3.js";
 
 class ContractModule {
   async deployContract(programData, senderAccount) {
@@ -13,6 +13,24 @@ class ContractModule {
         programId: programData.programId,
       }),
     );
+
+    const signature = await this.connection.sendTransaction(transaction, [
+      senderAccount,
+    ]);
+    return signature;
+  }
+
+  async callContractFunctions(
+    programId,
+    instructionData,
+    senderAccount,
+    additionalAccounts = [],
+  ) {
+    const transaction = new Transaction().add({
+      keys: additionalAccounts,
+      programId: new PublicKey(programId),
+      data: instructionData,
+    });
 
     const signature = await this.connection.sendTransaction(transaction, [
       senderAccount,
