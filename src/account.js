@@ -27,6 +27,15 @@ class AccountModule {
     const signature = await this.connection.requestAirdrop(pubkey, amount);
     return signature;
   }
+
+  async getMultipleAccountInfo(publicKeys) {
+    const publicKeysArray = publicKeys.map(
+      (publicKey) => new PublicKey(publicKey),
+    );
+    const accountInfos =
+      await this.connection.getMulitpleAccountInfo(publicKeysArray);
+    return accountInfos;
+  }
 }
 
 export default AccountModule;

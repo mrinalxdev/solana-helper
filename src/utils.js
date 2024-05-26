@@ -12,6 +12,14 @@ class UtilsModule {
   generatRandomKeypair() {
     return Keypair.generate();
   }
+
+  encodeBase58(data) {
+    return Buffer.from(data).toString("base64");
+  }
+
+  decodeBase58(data) {
+    return Buffer.from(data, "base64").toString();
+  }
 }
 
 modules.export = UtilsModule;
