@@ -1,14 +1,16 @@
 import SolanaHelper from "./initialization";
-import { prototype } from "./account";
-import { prototype as _prototype } from "./transaction";
-import { prototype as __prototype } from "./contract";
+import { AccountModule } from "./account";
+import { TransactionModule } from "./transaction";
+import { ContractModule } from "./contract";
+import { UtilsModule } from "./utils";
 
 class SolanaHelperExtended extends SolanaHelper {
   constructor(endpoint) {
     super(endpoint);
-    Object.assign(this, prototype);
-    Object.assign(this, _prototype);
-    Object.assign(this, __prototype);
+    Object.assign(this, AccountModule.prototype);
+    Object.assign(this, TransactionModule.prototype);
+    Object.assign(this, ContractModule.prototype);
+    Object.assign(this, UtilsModule.prototype);
   }
 }
 export default SolanaHelperExtended;

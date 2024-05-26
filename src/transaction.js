@@ -1,4 +1,4 @@
-import { Transaction, SystemProgram } from "@solana/web3.js";
+import { Transaction, SystemProgram, PublicKey } from "@solana/web3.js";
 
 class TransactionModule {
   async sendTransaction(senderAccount, recieverAccount, amount) {
@@ -19,6 +19,27 @@ class TransactionModule {
   async getTransactionDetails(signature) {
     const details = await this.connection.getTransaction(signature);
     return details;
+  }
+
+  async createTokenTrnasferTransaction(
+    senderAccount,
+    receiverPublicKey,
+    amount,
+    tokenProgramId,
+  ) {
+    const transaction = new Transaction().add(
+      SystemProgram.tranfer({
+        fromPubkey: senderAccount.publicKey,
+        toPubkey: new PublicKey(receiverPublicKey),
+        lamports: amount,
+        programId: tokenProgramId,
+      }),
+    );
+
+    const signature = await this.connection.sendTransaction(transaction, [
+      senderAccount,
+    ]);
+    return signature;
   }
 }
 

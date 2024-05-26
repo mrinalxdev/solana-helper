@@ -37,6 +37,12 @@ class ContractModule {
     ]);
     return signature;
   }
+
+  async getProgramAccountInfo(programId) {
+    const programKey = new PublicKey(programId);
+    const accountInfo = await this.connection.getAccountInfo(programKey);
+    return accountInfo;
+  }
 }
 
 export default ContractModule;
