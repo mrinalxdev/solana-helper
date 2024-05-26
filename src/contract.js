@@ -43,6 +43,40 @@ class ContractModule {
     const accountInfo = await this.connection.getAccountInfo(programKey);
     return accountInfo;
   }
+
+  async invokeContractMethod(
+    programId,
+    methodName,
+    methodArguments,
+    senderAccount,
+    additionalAccounts = [],
+  ) {
+    const instructionData = Buffer.from(
+      JSON.stringify({ methodName, methodArguments }),
+    );
+    const transaction = new Transaction().add({
+      keys: additionalAccounts,
+      programId: new PublicKey(programId),
+      data: instructionData,
+    });
+
+    const signature = await this.connection.sendTransaction(transaction, [
+      senderAccount,
+    ]);
+    return signature;
+  }
+
+  async deployProgrmaWithInstructions(programInstructions, senderAccount) {
+    const transaction = new Transaction();
+    programInstructions.forEach((instruction) => {
+      transaction.add(instruction);
+    });
+
+    const signature = await this.connection.sendTransaction(transaction, [
+      senderAccount,
+    ]);
+    return signature;
+  }
 }
 
 export default ContractModule;
